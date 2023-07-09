@@ -1,4 +1,4 @@
-# Spring Boot - Hive Connection POC
+# Spring Boot - ArchLens 
 
 Spring Boot project to demonstrate how to connect to Hive.
 
