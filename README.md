@@ -1,6 +1,6 @@
 # Spring Boot - ArchLens 
 
-Spring Boot project to demonstrate how to connect to Hive.
+Spring Boot project to connect t external table and extract data
 
 ## APIs
 
