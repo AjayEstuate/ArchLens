@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class HiveConfig {
 
 	@Value("${hive.connectionURL}")
-	private String hiveConnectionURL ; //= "jdbc:hive2://192.168.0.112:1000/ajay_test";
+	private String hiveConnectionURL ; 
 	
 	@Value("${hive.username}")
 	private String userName;
@@ -36,9 +36,9 @@ public class HiveConfig {
 	
 	@Bean(name = "jdbcTemplate")
 	public JdbcTemplate getJDBCTemplate() throws IOException {
-//		JdbcTemplate jc = new JdbcTemplate(getHiveDataSource());
+//		JdbcTemplate jt = new JdbcTemplate(getHiveDataSource());
 		return new JdbcTemplate(getHiveDataSource());
-//		return jc;
+//		return jt;
 	}
 }
 
