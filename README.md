@@ -4,16 +4,17 @@ Spring Boot project to demonstrate how to connect to Hive.
 
 ## APIs
 
-This project has three APIs:
-1. ```/hive/schemas``` - To get the list of all schemas in Hive.
-2. ```/hive/{schema}/tables``` - To get the list of all tables in the given schema.
-3. ```/hive/{schema}/preview/{table}``` - Te preview the table (get the first 10 records)
+This project has 4 APIs:
+1. ```/blob-viewer/schemas``` - To get the list of all schemas in External Table.
+2. ```/blob-viewer/{schema}/tables``` - To get the list of all tables in the given schema.
+3. ```/blob-viewer/{schema}/preview/{table}``` - To preview the table (get the first 10 records)
+4. ```/blob-viewer/schemas{schema}/view/{table}/blobData={blobVaLColName}/fileName={fileNameCN}/extension={extensionCN}/{idName}={idVal}``` - To download a blob data
 
 ---
 
 ## Server
 
-By default the server is running on port ```8082```. This can be changed in the 
+By default the server is running on port ```8080```. This can be changed in the 
 ```application.properties``` file.
 
 ---
@@ -21,16 +22,8 @@ By default the server is running on port ```8082```. This can be changed in the
 ## Connection to Hive
 
 By default the service tries to connect to Hive running at ```localhost```
-on port ```10001```, with HTTP as the transport mode and ```cliservice``` as 
+on port ```10000```, with HTTP as the transport mode and ```cliservice``` as 
 the HTTP path. This configuration can be changed in the ```application.properties```
 file.
-
----
-
-## Authentication Configuration
-
-Authentication configuration is already in place in the ```application.properties```
-file and also in the ```HiveConfig``` configuration class. But this code is 
-commented right now. 
 
 ---
