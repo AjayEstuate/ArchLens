@@ -31,6 +31,7 @@ public class HiveRepository {
     public List<Map<String, Object>> getTablePreview(String schema, String table) {
         jdbcTemplate.execute("use " + schema);
         String query = PREVIEW_TABLE_QUERY.replace(TABLE_PLACEHOLDER, table);
+        System.out.println("Query"+query);
         return jdbcTemplate.queryForList(query);
     }
     
@@ -40,4 +41,7 @@ public class HiveRepository {
         System.out.println("Query"+query);
         return jdbcTemplate.queryForList(query);
     }
+   
+		
+
 }
