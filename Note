@@ -1,3 +1,0 @@
-/hive/schemas - To get the list of all schemas in Hive.
-/hive/{schema}/tables - To get the list of all tables in the given schema.
-/hive/{schema}/preview/{table} - To preview the table (get the first 10 records)
