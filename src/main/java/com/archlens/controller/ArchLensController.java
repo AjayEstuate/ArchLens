@@ -2,146 +2,262 @@ package com.archlens.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.archlens.configuration.ExternalTableConfig;
+import com.archlens.entity.ExternalTableDataSource;
 import com.archlens.service.ArchLensService;
 
 @RestController
 @RequestMapping("/ArchLens")
 public class ArchLensController {
-	
-    public static String getSubstringAfterLastSlash(String filePath) {
-        int lastSlashIndex = filePath.lastIndexOf('/');
-        
-        if (lastSlashIndex != -1 && lastSlashIndex < filePath.length() - 1) {
-            return filePath.substring(lastSlashIndex + 1);
-        }
-        
-        return "";
-    }
 
-	@GetMapping(value ="/view/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/{idName}={idVal}" , produces = MediaType.ALL_VALUE)
-	public void viewBlob(
+	public static String getSubstringAfterLastSlash(String filePath) {
+		int lastSlashIndex = filePath.lastIndexOf('/');
+
+		if (lastSlashIndex != -1 && lastSlashIndex < filePath.length() - 1) {
+			return filePath.substring(lastSlashIndex + 1);
+		}
+
+		return "";
+	}
+
+	@PostMapping("/addConfig")
+	public String addConfig(@RequestBody ExternalTableDataSource configData) {
+		return 	ArchLensService.addConfig(configData);
+
+
+	}
+
+	//    @PostMapping("/addConfig")
+	//    public String addConfig(@RequestBody ExternalTableDataSource configData) {
+	//        String configName = configData.getConfigName();
+	//        String host = configData.getHost();
+	//        String port = configData.getPort();
+	//        String userName = configData.getUserName();
+	//        String password = configData.getPassword();
+	//
+	//        ObjectMapper objectMapper = new ObjectMapper();
+	//		ObjectNode configNode = objectMapper.createObjectNode();
+	//		ObjectNode connectionNode = objectMapper.createObjectNode();
+	//		
+	//		connectionNode.put("connectionURL", "jdbc:hive2://" + host + ":" + port);
+	//		connectionNode.put("username", userName);
+	//		connectionNode.put("password", password);
+	//
+	//		configNode.set(configName, connectionNode);
+	//
+	//		try {
+	//			FileWriter fileWriter = new FileWriter("property.json");
+	//			objectMapper.writerWithDefaultPrettyPrinter().writeValue(fileWriter, configNode);
+	//			fileWriter.close();
+	//			System.out.println("Configuration has been written to config.json successfully!");
+	//		} catch (IOException e) {
+	//			e.printStackTrace();
+	//			System.err.println("Error while writing the configuration to config.json");
+	//		}
+	//		return "Config Added ";
+	//		
+	//
+	//    }
+
+
+	//	@GetMapping(value ="/view/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/{idName}={idVal}" , produces = MediaType.ALL_VALUE)
+	//	public void viewBlob(
+	//			@PathVariable String config,
+	//			@PathVariable String schema,
+	//			@PathVariable String table,
+	//			@PathVariable String blobColName,
+	//			@PathVariable String idName,
+	//			@PathVariable String idVal,
+	//			HttpServletResponse response
+	//			) {
+	//
+	//		try {
+	//			ArchLensService.viewBlobData(config, schema, table, blobColName, idName, idVal, response);
+	//		} catch (SQLException | IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//	}
+
+
+	@GetMapping(value ="/view/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/fileName={fileName}/{idName}={idVal}" , produces = MediaType.ALL_VALUE)
+	public ResponseEntity<?> viewBlob(
 			@PathVariable String config,
 			@PathVariable String schema,
 			@PathVariable String table,
 			@PathVariable String blobColName,
+			@PathVariable String fileName,
 			@PathVariable String idName,
 			@PathVariable String idVal,
 			HttpServletResponse response
 			) {
 
 		try {
-			ArchLensService.viewBlobData(config, schema, table, blobColName, idName, idVal, response);
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("API Hitted");
+			ArchLensService.viewBlobData(config, schema, table, blobColName, fileName, idName, idVal, response);
+
+			return new ResponseEntity<String>("Details Fetched Sucesfully", HttpStatus.CREATED);
+		} catch (SQLException c ) {
+			System.out.println("SQL EXCEPTIon ----------->"+c.getMessage());
+			return new ResponseEntity<String>(c.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (IOException p) {
+			return new ResponseEntity<String>(p.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+
+	//	@GetMapping(value ="/download/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/{idName}={idVal}" , produces = MediaType.ALL_VALUE)
+	//	public ResponseEntity<InputStreamResource> downloadFile(
+	//			@PathVariable String config,
+	//			@PathVariable String schema,
+	//			@PathVariable String table,
+	//			@PathVariable String blobColName,
+	//			@PathVariable String idName,
+	//			@PathVariable String idVal,
+	//			HttpServletResponse response
+	//			) throws IOException, SQLException  {
+	//
+	//		ResultSet result = ExternalTableConfig.createConnection(config, schema, table, idName, idVal);
+	//		if (result.next()) {
+	//			String file_name = result.getString("path");
+	//			Object fileData = result.getObject(blobColName);
+	//			byte[] content = (byte[]) fileData;
+	//			if (fileData != null) {
+	//				// Convert the binary data to a file
+	//				InputStream inputStream = new ByteArrayInputStream(content);
+	//				
+	//				String fileName = getSubstringAfterLastSlash(file_name);
+	//				File file = new File(fileName);
+	//				FileOutputStream outputStream = new FileOutputStream(file);
+	//				byte[] buffer = new byte[4096];
+	//				int bytesRead;
+	//				while ((bytesRead = inputStream.read(buffer)) != -1) {
+	//					outputStream.write(buffer, 0, bytesRead);
+	//				}
+	//
+	//				// Set response headers
+	//				HttpHeaders headers = new HttpHeaders();
+	//				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	//				headers.setContentDispositionFormData("attachment", file.getName());
+	//
+	//				// Create the InputStreamResource from the file
+	//				InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+	//
+	//				// Clean up resources
+	//				inputStream.close();
+	//				outputStream.close();
+	//				file.delete();
+	//
+	//				// Return the file as a response entity
+	//				return ResponseEntity.ok()
+	//						.headers(headers)
+	//						.contentLength(file.length())
+	//						.body(resource);
+	//			} else {
+	//				// File not found in the database
+	//				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	//			}
+	//
+	//		}
+	//		return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+	//
+	//	}
+
+	@GetMapping(value = "/download/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/fileName={file_name}/{idName}={idVal}", produces = MediaType.ALL_VALUE)
+	public void downloadFile(
+			@PathVariable String config,
+			@PathVariable String schema,
+			@PathVariable String table,
+			@PathVariable String blobColName,
+			@PathVariable String file_name,
+			@PathVariable String idName,
+			@PathVariable String idVal,
+			HttpServletResponse response) throws IOException, SQLException {
+
+		List result = ExternalTableConfig.createConnection( config,  schema,  table,
+				 blobColName,  file_name,  idName,  idVal);
+		//		    if (result.next()) {
+		Object fileData = result.get(0);
+		String fileName = (String) result.get(1);
+//		String fileName = getSubstringAfterLastSlash(file_name);
+
+		byte[] content = (byte[]) fileData;
+		if (fileData != null) {
+			// Set response headers
+			response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+			// Write the content directly to the response output stream
+			OutputStream outputStream = response.getOutputStream();
+			outputStream.write(content);
+			outputStream.flush();
+			outputStream.close();
+		} else {
+			// File not found in the database
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		}
+		//		    } else {
+		//		        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		//		    }
+	}
+
+	@GetMapping("/join")
+	public void join() {
+		try {
+			String query = "";
+			// Establish the connection
+			Connection conn = DriverManager.getConnection("jdbc:hive2://192.168.0.112:10000", "", "");
+			Statement stmt = conn.createStatement();
+			ResultSet resultSet = stmt.executeQuery(query);
+
+			// Get the ResultSet metadata
+			ResultSetMetaData metadata = resultSet.getMetaData();
+			int columnCount = metadata.getColumnCount();
+
+			// Print column names
+			for (int i = 1; i <= columnCount; i++) {
+				System.out.print(metadata.getColumnName(i) + "\t");
+			}
+			System.out.println();
+
+			// Print column values
+			while (resultSet.next()) {
+				for (int i = 1; i <= columnCount; i++) {
+					Object value = resultSet.getObject(i);
+					System.out.print(value + "\t");
+				}
+				System.out.println();
+			}
+
+			// Close the resources
+			resultSet.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
-
-//	@GetMapping(value ="/download/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/{idName}={idVal}" , produces = MediaType.ALL_VALUE)
-//	public ResponseEntity<InputStreamResource> downloadFile(
-//			@PathVariable String config,
-//			@PathVariable String schema,
-//			@PathVariable String table,
-//			@PathVariable String blobColName,
-//			@PathVariable String idName,
-//			@PathVariable String idVal,
-//			HttpServletResponse response
-//			) throws IOException, SQLException  {
-//
-//		ResultSet result = ExternalTableConfig.createConnection(config, schema, table, idName, idVal);
-//		if (result.next()) {
-//			String file_name = result.getString("path");
-//			Object fileData = result.getObject(blobColName);
-//			byte[] content = (byte[]) fileData;
-//			if (fileData != null) {
-//				// Convert the binary data to a file
-//				InputStream inputStream = new ByteArrayInputStream(content);
-//				
-//				String fileName = getSubstringAfterLastSlash(file_name);
-//				File file = new File(fileName);
-//				FileOutputStream outputStream = new FileOutputStream(file);
-//				byte[] buffer = new byte[4096];
-//				int bytesRead;
-//				while ((bytesRead = inputStream.read(buffer)) != -1) {
-//					outputStream.write(buffer, 0, bytesRead);
-//				}
-//
-//				// Set response headers
-//				HttpHeaders headers = new HttpHeaders();
-//				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//				headers.setContentDispositionFormData("attachment", file.getName());
-//
-//				// Create the InputStreamResource from the file
-//				InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-//
-//				// Clean up resources
-//				inputStream.close();
-//				outputStream.close();
-//				file.delete();
-//
-//				// Return the file as a response entity
-//				return ResponseEntity.ok()
-//						.headers(headers)
-//						.contentLength(file.length())
-//						.body(resource);
-//			} else {
-//				// File not found in the database
-//				response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//			}
-//
-//		}
-//		return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
-//
-//	}
-	
-	@GetMapping(value = "/download/cfg={config}/schema={schema}/tablename={table}/blobColName={blobColName}/{idName}={idVal}", produces = MediaType.ALL_VALUE)
-	public void downloadFile(
-	        @PathVariable String config,
-	        @PathVariable String schema,
-	        @PathVariable String table,
-	        @PathVariable String blobColName,
-	        @PathVariable String idName,
-	        @PathVariable String idVal,
-	        HttpServletResponse response) throws IOException, SQLException {
-
-	    ResultSet result = ExternalTableConfig.createConnection(config, schema, table, idName, idVal);
-	    if (result.next()) {
-	        String file_name = result.getString("path");
-	        String fileName = getSubstringAfterLastSlash(file_name);
-	        Object fileData = result.getObject(blobColName);
-	        byte[] content = (byte[]) fileData;
-	        if (fileData != null) {
-	            // Set response headers
-	            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-	            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-
-	            // Write the content directly to the response output stream
-	            OutputStream outputStream = response.getOutputStream();
-	            outputStream.write(content);
-	            outputStream.flush();
-	            outputStream.close();
-	        } else {
-	            // File not found in the database
-	            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-	        }
-	    } else {
-	        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	    }
-	}
-
 }
 
 

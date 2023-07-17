@@ -1,17 +1,22 @@
 {
-    "config1": {
-        "connectionURL": "jdbc:hive2://192.168.33.82:10000",
-        "username": "",
-        "password": ""
-    },
-    "config2": {
-        "connectionURL": "jdbc:hive2://192.168.0.112:10000",
-        "username": "",
-        "password": ""
-    },
-    "config3": {
-        "connectionURL": "jdbc:hive2://192.168.33.82:10000",
-        "username": "",
-        "password": ""
-    }
+  "Congig1" : {
+    "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
+    "username" : "null",
+    "password" : "null"
+  },
+  "Congig2" : {
+    "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
+    "username" : "null",
+    "password" : "null"
+  },
+  "Congig3" : {
+    "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
+    "username" : "null",
+    "password" : "null"
+  },
+  "Congig4" : {
+    "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
+    "username" : "null",
+    "password" : "null"
+  }
 }
