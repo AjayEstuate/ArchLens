@@ -22,9 +22,9 @@ This can be changed in the ```application.properties``` file.
 
 ## Connection to External Table
 
-The server's default connection parameters are set as follows: it will attempt to connect to the host - '''localhost''' on port -'''10000''', with the '''username and password''' - both set to - '''null'''.
-However, these settings can be modified in the - '''property.json''' file. 
-Alternatively, new server details can be added using the - '''Archlens/data-source''' API.
+The server's default connection parameters are set as follows: it will attempt to connect to the host "localhost" on port "10000", with the "username and password" both set to "null".
+However, these settings can be modified in the "property.json" file. 
+Alternatively, new server details can be added using the "Archlens/data-source" API.
 
 
 ---
