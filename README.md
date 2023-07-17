@@ -15,7 +15,7 @@ This project has 5 APIs:
 
 ## Server
 
-By default the server is running on port - ```8080```. 
+By default, the server is running on port - ```8080```. 
 This can be changed in the ```application.properties``` file.
 
 ---
