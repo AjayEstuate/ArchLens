@@ -1,22 +1,17 @@
 {
-  "Congig1" : {
+  "ds1" : {
     "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
-    "username" : "null",
-    "password" : "null"
+    "username" : "Fy96Qoo+MEWHVsChsKTKWukZrfwFGM1Uy16zF4kpxlY=",
+    "password" : "a3fwtmBwsJWR6R0REP+mZBOzNCPO+uYsOKYgKVEbc/w="
   },
-  "Congig2" : {
-    "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
-    "username" : "null",
-    "password" : "null"
+  "ds2" : {
+    "connectionURL" : "jdbc:hive2://192.168.0.112:10000",
+    "username" : "QkUvMvtg8D+nvFUE26mgT0+OShPtZ9eAfyTskoOXh9k=",
+    "password" : "XjvENbX5/l+ZLYwsjvnYhQ+EMnVXj7JvghIpI7INUt8="
   },
-  "Congig3" : {
+  "ds5" : {
     "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
-    "username" : "null",
-    "password" : "null"
-  },
-  "Congig4" : {
-    "connectionURL" : "jdbc:hive2://192.168.33.82:10000",
-    "username" : "null",
-    "password" : "null"
+    "username" : "M/UI8OCtW5A2aFOFb8GyauryN36kezG7PMFlGCCsWUk=",
+    "password" : "QbNAl6YTRpdBfR7ZQB6YMqSI61lh6O1jqI2sbdHCczE="
   }
 }

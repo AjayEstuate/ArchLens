@@ -2,7 +2,7 @@ package com.archlens.entity;
 
 public class ExternalTableDataSource {
 	
-	private String configName;
+	private String dataSource;
 	private String host;
 	private String port;
 	private String userName;
@@ -10,19 +10,19 @@ public class ExternalTableDataSource {
 	
 	
 	
-	public ExternalTableDataSource(String configName, String host, String port, String userName, String password) {
+	public ExternalTableDataSource(String dataSource, String host, String port, String userName, String password) {
 		super();
-		this.configName = configName;
+		this.dataSource = dataSource;
 		this.host = host;
 		this.port = port;
 		this.userName = userName;
 		this.password = password;
 	}
-	public String getConfigName() {
-		return configName;
+	public String getDataSource() {
+		return dataSource;
 	}
-	public void setConfigName(String configName) {
-		this.configName = configName;
+	public void setDataSource(String dataSource) {
+		this.dataSource = dataSource;
 	}
 	public String getHost() {
 		return host;
@@ -48,7 +48,6 @@ public class ExternalTableDataSource {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 	
 	
 
