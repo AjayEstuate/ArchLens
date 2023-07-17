@@ -1,29 +1,30 @@
 # Spring Boot - ArchLens 
 
-Spring Boot project to connect t external table and extract data
+Spring Boot project to connect t0 external table and extract  binary data and View or Download it into original file.
 
 ## APIs
 
-This project has 4 APIs:
-1. ```/blob-viewer/schemas``` - To get the list of all schemas in External Table.
-2. ```/blob-viewer/{schema}/tables``` - To get the list of all tables in the given schema.
-3. ```/blob-viewer/{schema}/preview/{table}``` - To preview the table (get the first 10 records)
-4. ```/blob-viewer/schemas{schema}/view/{table}/blobData={blobVaLColName}/fileName={fileNameCN}/extension={extensionCN}/{idName}={idVal}``` - To download a blob data
+This project has 5 APIs:
+1. ```/ArchLens/ds={datasource}/schemas``` - To get the list of all schemas present in External Table
+2. ```/ArchLens/ds={datasource}/schema={schema}/tables``` - To get the list of tables present in the schema.
+3. ```/ArchLens/view/ds={datasource}/schema={schema}/tablename={table}/blobColName={blobColName}/fileName={fileName}/{idName}={idVal}``` - To preview the table (get the first 10 records)
+4. ```/ArchLens/download/ds={datasource}/schema={schema}/tablename={table}/blobColName={blobColName}/fileName={file_name}/{idName}={idVal}``` - To download a blob data
+5. ''` /ArchLens/data-source - To add Server configuration details  '''
 
 ---
 
 ## Server
 
-By default the server is running on port ```8080```. This can be changed in the 
-```application.properties``` file.
+By default the server is running on port ```8080```. 
+This can be changed in the ```application.properties``` file.
 
 ---
 
-## Connection to Hive
+## Connection to External Table
 
-By default the service tries to connect to Hive running at ```localhost```
-on port ```10000```, with HTTP as the transport mode and ```cliservice``` as 
-the HTTP path. This configuration can be changed in the ```application.properties```
-file.
+The server's default connection parameters are set as follows: it will attempt to connect to the host '''localhost''' on port '''10000''', with the '''username and password''' both set to '''null'''.
+However, these settings can be modified in the '''property.json''' file. 
+Alternatively, new server details can be added using the '''Archlens/data-source''' API.
+
 
 ---
