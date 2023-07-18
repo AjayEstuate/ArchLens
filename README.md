@@ -9,7 +9,7 @@ This project has 5 APIs:
 2. ```/ArchLens/ds={datasource}/schema={schema}/tables``` - To get the list of tables in the schema.
 3. ```/ArchLens/view/ds={datasource}/schema={schema}/tablename={table}/blobColName={blobColName}/fileName={fileName}/{idName}={idVal}``` - To preview the table (get the first 10 records)
 4. ```/ArchLens/download/ds={datasource}/schema={schema}/tablename={table}/blobColName={blobColName}/fileName={file_name}/{idName}={idVal}``` - To download a blob data
-5. ''` /ArchLens/data-source - To add Server configuration details  '''
+5. ```/ArchLens/data-source``` - To add Server configuration details  '''
 
 ---
 
@@ -22,9 +22,9 @@ This can be changed in the ```application.properties``` file.
 
 ## Connection to External Table
 
-The server's default connection parameters are set as follows: it will attempt to connect to the host "localhost" on port "10000", with the "username and password" both set to "null".
-However, these settings can be modified in the "property.json" file. 
-Alternatively, the "Archlens/data-source" API can add new server details.
+The server's default connection parameters are set as follows: it will attempt to connect to the host ```localhost``` on port ```10000```, with the ```username and password``` both set to ```null```.
+However, these settings can be modified in the ```property.json``` file. 
+Alternatively, the ```Archlens/data-source``` API can add new server details.
 
 
 ---
