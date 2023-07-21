@@ -40,6 +40,10 @@ public class ArchLensService {
 
 		Object data = result.get(0);
 		String file_name = (String) result.get(1);
+		
+		if (file_name.contains("/")) {
+			file_name = getSubstringAfterLastSlash(file_name);
+		}
 
 		byte[] content = (byte[]) data;
 

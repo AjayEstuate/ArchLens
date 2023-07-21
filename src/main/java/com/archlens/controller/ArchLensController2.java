@@ -130,6 +130,10 @@ public class ArchLensController2 {
 
 		Object fileData = result.get(0);
 		String fileName = (String) result.get(1);
+		
+		if (file_name.contains("/")) {
+			file_name =ArchLensService.getSubstringAfterLastSlash(file_name);
+		}
 
 		byte[] content = (byte[]) fileData;
 		if (fileData != null) {
