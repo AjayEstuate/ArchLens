@@ -13,6 +13,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -56,8 +58,8 @@ public class ArchLensService {
 
 	}
 
-
-	public static String addConfig(ExternalTableDataSource configData)throws SQLException, Exception , ConnectException{
+	public static String addConfig(ExternalTableDataSource configData)
+			throws SQLException, Exception, ConnectException {
 		String dataSource = configData.getDataSource();
 		String host = configData.getHost();
 		String port = configData.getPort();
@@ -68,7 +70,7 @@ public class ArchLensService {
 		try {
 			Connection connection = DriverManager.getConnection(connectionURL, userName, password);
 			if (connection == null) {
-				throw new  SQLException("Connetion Refused");
+				throw new SQLException("Connetion Refused");
 			}
 			try {
 				userName = ArchLensSecurity.encrypt(userName);
@@ -129,10 +131,10 @@ public class ArchLensService {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new  SQLException("Connetion Refused : " + e.getMessage());
-		}catch (IllegalArgumentException e) {
+			throw new SQLException("Connetion Refused : " + e.getMessage());
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			throw new  Exception("Connetion Refused : " + e.getMessage());
+			throw new Exception("Connetion Refused : " + e.getMessage());
 		}
 
 	}
@@ -145,6 +147,32 @@ public class ArchLensService {
 		}
 
 		return "";
+	}
+
+	public static List<String> getJsonKeysFromFile() throws Exception {
+		String filePath = "property.json";
+		List<String> keys = new ArrayList<>();
+
+		try {
+			File jsonFile = new File(filePath);
+			ObjectMapper objectMapper = new ObjectMapper();
+			JsonNode rootNode = objectMapper.readTree(jsonFile);
+
+			if (rootNode.isObject()) {
+				Iterator<String> fieldNames = rootNode.fieldNames();
+				while (fieldNames.hasNext()) {
+					String key = fieldNames.next();
+					keys.add(key);
+				}
+			} else {
+				System.out.println("The JSON in the file is not an object.");
+			}
+		} catch (IOException e) {
+			System.out.println("Error reading the JSON file: " + e.getMessage());
+			throw new Exception("Error reading the JSON file : " + e.getMessage());
+		}
+
+		return keys;
 	}
 
 }

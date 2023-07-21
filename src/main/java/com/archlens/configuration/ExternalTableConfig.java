@@ -31,14 +31,13 @@ public class ExternalTableConfig {
 			ResultSetMetaData metadata = resultSet.getMetaData();
 			int columnCount = metadata.getColumnCount();
 
-			List<Object> schemas = new ArrayList<Object>();
+			List schemas = new ArrayList<Object>();
 			while (resultSet.next()) {
 				for (int i = 1; i <= columnCount; i++) {
 					Object value = resultSet.getObject(i);
 					schemas.add(value);
 				}
 			}
-
 			return schemas;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,7 +45,7 @@ public class ExternalTableConfig {
 		return null;
 	}
 
-	public static List<Object> getSchemas(String config) throws SQLException, IOException {
+	public static List<String> getSchemas(String config) throws SQLException, IOException {
 
 		String query = "SHOW SCHEMAS";
 		String connectionURL = null, username = null, password = null;
@@ -83,11 +82,11 @@ public class ExternalTableConfig {
 			ResultSetMetaData metadata = resultSet.getMetaData();
 			int columnCount = metadata.getColumnCount();
 
-			List<Object> schemas = new ArrayList<Object>();
+			List<String> schemas = new ArrayList<>();
 			while (resultSet.next()) {
 				for (int i = 1; i <= columnCount; i++) {
 					Object value = resultSet.getObject(i);
-					schemas.add(value);
+					schemas.add((String) value);
 				}
 			}
 
@@ -123,7 +122,7 @@ public class ExternalTableConfig {
 		return tables;
 	}
 
-	public static List<Object> getTables(String config, String schema) throws SQLException, IOException {
+	public static List<String> getTables(String config, String schema) throws SQLException, IOException {
 		String query = "SHOW Tables";
 
 		String connectionURL = null, username = null, password = null;
@@ -162,12 +161,12 @@ public class ExternalTableConfig {
 			ResultSetMetaData metadata = resultSet.getMetaData();
 			int columnCount = metadata.getColumnCount();
 
-			List<Object> tables = new ArrayList<Object>();
+			List<String> tables = new ArrayList<String>();
 
 			while (resultSet.next()) {
 				for (int i = 2; i <= columnCount; i++) {
 					Object value = resultSet.getObject(i);
-					tables.add(value);
+					tables.add((String) value);
 					break;
 				}
 			}

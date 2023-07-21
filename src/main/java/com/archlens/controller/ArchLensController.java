@@ -29,7 +29,11 @@ import com.archlens.service.ArchLensService;
 public class ArchLensController {
 
 
-
+	@GetMapping("/")
+	public String home(){
+		return "Welcome to ArchLens";
+	}
+	
 
 	@PostMapping("/data-source")
 	public ResponseEntity<?> addConfig(@RequestBody ExternalTableDataSource configData) {
@@ -42,6 +46,18 @@ public class ArchLensController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} 
 
+	}
+	
+	@GetMapping("/data-sources")
+	public List getDataSources() {
+		List schemas = null;
+		try {
+			schemas = ArchLensService.getJsonKeysFromFile();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return schemas;
 	}
 
 	@GetMapping("/ds={datasource}/schemas")
